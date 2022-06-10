@@ -21,6 +21,10 @@ class UserController extends AbstractController
      */
     public function listAction(ManagerRegistry $doctrine)
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('homepage');
+        }
+        
         return $this->render('user/list.html.twig', ['users' => $doctrine->getRepository(User::class)->findAll()]);
     }
 
@@ -29,6 +33,10 @@ class UserController extends AbstractController
      */
     public function createAction(ManagerRegistry $doctrine, Request $request, UserPasswordHasherInterface $userPasswordHasher)
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -61,6 +69,10 @@ class UserController extends AbstractController
      */
     public function editAction(User $user, Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $userPasswordHasher)
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
