@@ -18,6 +18,10 @@ class TaskController extends AbstractController
      */
     public function listAction(ManagerRegistry $doctrine)
     {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         return $this->render('task/list.html.twig', ['tasks' => $doctrine->getRepository(Task::class)->findAll()]);
     }
 
@@ -26,6 +30,11 @@ class TaskController extends AbstractController
      */
     public function createAction(Request $request, ManagerRegistry $doctrine)
     {
+
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -54,6 +63,21 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request, ManagerRegistry $doctrine)
     {
+
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        if ($task->getUser()->getEmail() != $this->getUser()->getUserIdentifier() && $this->isGranted('ROLE_USER')){
+            
+            return $this->redirectToRoute('homepage');
+        
+        }elseif ($task->getUser()->getUsername() == 'anonymous' && $this->isGranted('ROLE_USER')){
+
+            return $this->redirectToRoute('homepage');
+        
+        }else{
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -70,6 +94,8 @@ class TaskController extends AbstractController
             'form' => $form->createView(),
             'task' => $task,
         ]);
+
+    }
     }
 
     /**
@@ -77,12 +103,29 @@ class TaskController extends AbstractController
      */
     public function toggleTaskAction(Task $task, ManagerRegistry $doctrine)
     {
+
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        if ($task->getUser()->getEmail() != $this->getUser()->getUserIdentifier() && $this->isGranted('ROLE_USER')){
+            
+            return $this->redirectToRoute('homepage');
+        
+        }elseif ($task->getUser()->getUsername() == 'anonymous' && $this->isGranted('ROLE_USER')){
+
+            return $this->redirectToRoute('homepage');
+        
+        }else{
+
         $task->toggle(!$task->isDone());
         $doctrine->getManager()->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
         return $this->redirectToRoute('task_list');
+
+        }
     }
 
     /**
@@ -90,6 +133,21 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task, ManagerRegistry $doctrine)
     {
+
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        if ($task->getUser()->getEmail() != $this->getUser()->getUserIdentifier() && $this->isGranted('ROLE_USER')){
+            
+            return $this->redirectToRoute('homepage');
+        
+        }elseif ($task->getUser()->getUsername() == 'anonymous' && $this->isGranted('ROLE_USER')){
+
+            return $this->redirectToRoute('homepage');
+        
+        }else{
+
         $em = $doctrine->getManager();
         $em->remove($task);
         $em->flush();
@@ -97,5 +155,7 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
+        }
+
     }
 }
