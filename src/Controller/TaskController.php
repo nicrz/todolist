@@ -22,7 +22,9 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('task/list.html.twig', ['tasks' => $doctrine->getRepository(Task::class)->findAll()]);
+        return $this->render('task/list.html.twig', ['tasks' => $doctrine->getRepository(Task::class)->findBy(
+            ['user' => $this->getUser()]
+        )]);
     }
 
     /**
