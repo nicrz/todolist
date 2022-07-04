@@ -120,7 +120,7 @@ class TaskController extends AbstractController
         
         }else{
 
-        $task->toggle(!$task->isDone());
+        $task->toggle(!$task->getIsDone());
         $doctrine->getManager()->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
