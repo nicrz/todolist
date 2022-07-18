@@ -23,20 +23,22 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-        <exclude>
-            <directory suffix=".php">var/</directory>
-            <directory suffix=".php">vendor/</directory>
-            <directory suffix=".php">public/</directory>
-        </exclude>
-    </coverage>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory>./src/*/*Bundle/Resources</directory>
+                <directory>./src/*/*Bundle/Tests</directory>
+                <directory>./src/*/Bundle/*Bundle/Resources</directory>
+                <directory>./src/*/Bundle/*Bundle/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
     </listeners>
+
 
     <!-- Run `composer require symfony/panther` before enabling this extension -->
     <!--

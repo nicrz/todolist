@@ -126,7 +126,7 @@ class TaskControllerTest extends WebTestCase
         $client->loginUser($testUser);
 
         // test e.g. the profile page
-        $client->request('GET', '/tasks/49/delete');
+        $client->request('GET', '/tasks/50/delete');
 
         // checking what happen after redirection
         $crawler = $client->followRedirect();
