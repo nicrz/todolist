@@ -71,11 +71,8 @@ git clone https://github.com/nicrz/todolist
 ```
 DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7
 ```
-##### 3/ Installez la structure de la base de données
-```
-    php bin/console doctrine:database:create
-    php bin/console doctrine:migrations:migrate
-```
+##### 3/ Importez le fichier todolist.sql dans votre système de gestion de base de données
+
 ##### 4/ Récupérez les dépendances du projet grâce à la commande suivante
 ```
 composer install
